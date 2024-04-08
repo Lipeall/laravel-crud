@@ -17,14 +17,46 @@
 			<div class="row d-flex justify-center">
                 @if(Session::has('success'))
                     <div class="alert alert-success">
-                        <!-- {{Session::get('success')}} -->
-                        Product added succesfully! 
+                        {{Session::get('success')}}
                     </div>
                 @endif
 			<div class="card border-0 shadow-lg p-0">
 				<div class="card-header bg-dark">
 				    <h3 class="text-white">Products</h3>
 				</div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <th class="text-center">ID</th>
+                            <th class="text-center"></th>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Sku</th>
+                            <th class="text-center">Price</th>
+                            <th class="text-center">Created At</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                        @if($products->isNotEmpty())
+                            @foreach($products as $product)
+                                <tr>
+                                    <td class="text-center">{{ $product->id }}</td>
+                                    <td class="text-center">
+                                        @if($product->image != "")
+                                            <img width="50" height="50" class="rounded" src="{{ asset('uploads/products/'.$product->image) }}" alt="{{ $product->image}}" />
+                                        @endif
+                                    </td>
+                                    <td class="text-center">{{ $product->name }}</td>
+                                    <td class="text-center">{{ $product->sku }}</td>
+                                    <td class="text-center">${{ $product->price }}</td>
+                                    <td class="text-center">{{ \Carbon\Carbon::parse($product->created_at)->format('d M, Y') }}</td>
+                                    <td class="text-center">
+                                        <a href="#" class="btn btn-dark">Edit</a>
+                                        <a href="#" class="btn btn-danger">Delete</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
+                    </table>
+                </div>
 			</div>
 			</div>
 		</div>
