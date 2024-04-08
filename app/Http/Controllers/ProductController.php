@@ -68,7 +68,7 @@ class ProductController extends Controller
 
     //Show edit product page
     public function edit($id) {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
         return view('products.edit', [
             'product' => $product
         ]);
@@ -76,7 +76,7 @@ class ProductController extends Controller
 
     //Update the product in db
     public function update($id, Request $request) {
-        $product = Product::find($id);
+        $product = Product::findOrFail($id);
 
         $rules = [
             'name' =>'required|min:3',
@@ -123,7 +123,16 @@ class ProductController extends Controller
     }
 
     //Delete the product from db
-    public function delete() {
+    public function delete($id) {
+        $product = Product::findOrFail($id);
+
+        //Delete image
+        File::delete(public_path("uploads/products/".$product->image));
+
+        //Delete product from database
+        $product->delete();
+
+        return redirect() -> route('products.index')->with('success', 'Product deleted succesfully!');
 
     }
 };

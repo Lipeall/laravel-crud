@@ -50,7 +50,11 @@
                                     <td class="text-center">{{ \Carbon\Carbon::parse($product->created_at)->format('d M, Y') }}</td>
                                     <td class="text-center">
                                         <a href="{{ route('products.edit', $product->id)}}" class="btn btn-dark">Edit</a>
-                                        <a href="#" class="btn btn-danger">Delete</a>
+                                        <a href="#"  data-id="{{ $product->id }}" class="btn btn-danger delete_user">Delete</a>
+                                        <form id="delete-product-from-{{ $product->id }}" action="{{ route('products.destroy', $product->id)}}" method="post">
+                                            @csrf
+                                            @method("delete")
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -62,3 +66,33 @@
 		</div>
 	</body>
 </html>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteButtons = document.querySelectorAll('.delete_user');
+        
+        deleteButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                deleteProduct(id);
+            });
+        });
+    });
+
+    function deleteProduct(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-product-from-' + id).submit();
+            }
+        })
+    }
+</script>
