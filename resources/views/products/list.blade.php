@@ -49,7 +49,7 @@
                                     <td class="text-center">${{ $product->price }}</td>
                                     <td class="text-center">{{ \Carbon\Carbon::parse($product->created_at)->format('d M, Y') }}</td>
                                     <td class="text-center">
-                                        <a href="#" class="btn btn-dark">Edit</a>
+                                        <a href="{{ route('products.edit', $product->id)}}" class="btn btn-dark">Edit</a>
                                         <a href="#" class="btn btn-danger">Delete</a>
                                     </td>
                                 </tr>
